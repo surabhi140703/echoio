@@ -1,0 +1,237 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homepage</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+ccFqD9fNXfYZV2a+mMHhMoc4Umm5qHy4pZ0PBw/Sr8k5W5" crossorigin="anonymous">
+    <style>
+        /* Custom CSS */
+        body {
+            background-image: url("/media/signup.jpg");
+            background-size: cover; 
+            height: 100%;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+        }
+        .post {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px; /* Reduced width */
+            margin: 0 auto; /* Center align */
+        }
+        .add-post-form {
+            display: none;
+            position: absolute;
+            top: 50px; /* Adjust the top position as needed */
+            right: 50%;
+            max-width: 500px;
+            background-color: #fff;
+            padding: 15px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transform: translateX(100%);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .add-post-form.active {
+            transform: translateX(0);
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(243, 243, 243, 0.7); /* Transparent background color */
+            padding: 10px 0;
+            text-align: left;
+            position: relative;
+            justify-content: space-between;
+        }
+
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar li {
+            display: inline;
+            margin: 0 15px;
+            margin-right: 10px;
+            font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif ;
+            color: azure;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+        .navbar-button{
+            color: #ff4500;
+        }
+        .a{
+            text-decoration: none;
+            color: rgb(7, 0, 0);
+            font-weight: bold;
+        }
+        .navbar a:hover {
+            color: #813acc; /* Change the color on hover */
+        }
+        .btn-primary {
+            background-color: #ff4500; /* Reddit orange */
+            border-color: #ff4500;
+        }
+        .btn-primary:hover {
+            background-color: #ff5e00; /* Slightly darker orange on hover */
+            border-color: #ff5e00;
+        }
+        .btn-primary:focus {
+            box-shadow: 0 0 0 0.2rem rgba(255, 69, 0, 0.5); /* Focus outline color */
+        }
+
+        .right-side {
+            margin-right: 0px;
+        }
+    </style>
+</head>
+<body>
+    <style>
+        /* Style for the navigation bar */
+        .navbar {
+            background-color: transparent; /* Light blue */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            position: fixed;
+        }
+
+        /* Style for the search box and buttons */
+        .search-box {
+            display: flex;
+        }
+
+        .search-box input[type="text"] {
+            width: 200px;
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .search-box button, .add-post button {
+            padding: 10px;
+            background-color: #0073e6; /* Light blue */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        /* Style for the profile and log-out links */
+        .navbar a {
+            text-decoration: none;
+            color: white;
+            margin: 0 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <div class="search-box">
+            <form action="/search" method="POST">
+            {% csrf_token %}
+            <input type="text" name='s1' placeholder="Search for username/community">
+            <button>Search</button>
+        </form>
+            <button class="add-post-button" id="add-post-btn">Add Post</button>
+        </div>
+        <div class="profile-links">
+            <a href="profilepage">Profile</a>
+            <a href="logout">Log-Out</a>
+        </div>
+    </div>
+    <br><br> <br>
+    {% for post in posts reversed %}
+    <div class="container mt-4">
+        <div class="post">
+            <h2>{{post.title}}</h2>
+            {% if post.post_image %}
+                <img height="100" width="100" src="{{post.post_image.url}}" /> 
+            {% endif %}
+            
+            <br>
+            <h4>community: {{post.community}} </h4>
+            <p>{{post.caption}}</p>
+            <div class="flex space-x-4 lg:font-bold">
+                <a href="/like-post?post_id={{post.id}}" class="flex items-center space-x-2">
+                    <div class="p-2 rounded-full text-black" style="height: 2 px;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                        </svg>
+                                             
+                        </a>
+                        {% if post.no_of_likes == 0 %}
+                        <p style="display: -moz-inline-box; margin-top: 0px;">No likes</p>
+                        {% elif post.no_of_likes == 1 %}
+                        <p>Liked by {{post.no_of_likes}} person</p>
+                        {% else %}
+                        <p>Liked by {{post.no_of_likes}} people</p>
+                        {% endif %}
+                    </div>
+                    <h5 style="display: inline-flexbox;"><a href="{% url 'post_detail' post_id=post.id %}">Comment</a></h5>
+        </div>
+    </div>
+    <br>
+            {% endfor %}
+     
+    <div>
+        <div class="add-post-form" id="add-post-form">
+            <h3>Add a New Post</h3>
+            <form action="upload" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="post-title" class="form-label">Post Title</label>
+                    <input type="text" class="form-control" name="post-title" required>
+                </div>
+                <div class="mb-3">
+                    <label for="post-community" class="form-label">Community name:</label>
+                    <input type="text" class="form-control" name="post-community" required>
+                </div>
+                <div class="mb-3">
+                    <label for="post-image" class="form-label">Optional Image</label>
+                    <input type="file" class="form-control-file" name="post-image">
+                </div>
+                <div class="mb-3">
+                    <label for="post-caption" class="form-label">Caption</label>
+                    <textarea class="form-control" name="post-caption" rows="10" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('add-post-btn').addEventListener('click', function () {
+            var addPostForm = document.getElementById('add-post-form');
+            addPostForm.style.display = 'block';
+            setTimeout(function () {
+        document.addEventListener('click', function (event) {
+            if (!addPostForm.contains(event.target)) {
+                // Clicked outside the form, so hide it
+                addPostForm.style.display = 'none';
+                document.removeEventListener('click', arguments.callee);
+            }
+        });
+    }, 100);
+});
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-XXqz4z7fMA4GNwzFf5r5mPp2wO1i6s5E2FEPUG0an5F5p5f5r5mPp2wO1i6s5E2FEPUG0an" crossorigin="anonymous"></script>
+</body>
+</html>

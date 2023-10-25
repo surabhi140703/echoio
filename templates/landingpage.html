@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to Our Website</title>
+    <style>
+        body {
+            font-family:  'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+            background: url('/media/landing.jpg') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: rgba(51, 51, 51, 0.7); /* Semi-transparent background color */
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        header a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .intro {
+            font-size: 1.8rem; /* Increase the font size */
+            margin: 20px auto; /* Center the text horizontally */
+            max-width: 600px; /* Reduce the width */
+            text-align: center;
+            background-color: rgba(51, 51, 51, 0.7); /* Semi-transparent background for the text */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .cta-button {
+            background-color: rgba(51, 51, 51, 0.7); /* Semi-transparent button background */
+            color: white;
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: rgba(85, 85, 85, 0.7); /* Semi-transparent button background on hover */
+        }
+
+        footer {
+            background-color: rgba(51, 51, 51, 0.7); /* Semi-transparent background color for the footer */
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1 style="font-family:  'Lucida Sans Unicode', sans-serif; font-weight: bold; font-size: 2rem;">Welcome to Echoio!</h1>
+        <nav>
+        </nav>
+    </header>
+
+    <div class="container">
+        <br><br>
+        <p class="intro" style="font-size: 27px;color: aliceblue;">Welcome to our website! We're excited to have you here. Our mission is to provide you with valuable content and services to make your online experience better. Whether you're looking for information, entertainment, or opportunities, we've got you covered.</p>
+
+        <div class="cta-buttons">
+            <a href='signup' class="cta-button">Sign-up</a>
+            <a href='signin' class="cta-button">Log-in</a>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2023 Echoio. All rights reserved.
+    </footer>
+</body>
+</html>

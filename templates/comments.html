@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* CSS for Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #333;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .navbar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            text-align: right;
+        }
+
+        .navbar li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        /* CSS for Main Content */
+        .content {
+            margin-top: 60px; /* To leave space for the fixed navbar */
+            padding: 20px;
+        }
+
+        /* Style post title and content */
+        h2 {
+            font-size: 24px;
+        }
+        p {
+            font-size: 16px;
+        }
+
+        /* Style comments and subcomments */
+        h3 {
+            font-size: 20px;
+        }
+        ul.comment-list {
+            list-style-type: disc; /* Bulleted list for comments */
+            padding-left: 20px;
+        }
+        ul.subcomment-list {
+            list-style-type: circle; /* Bulleted list for subcomments */
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+
+        /* Style Comment Form */
+        form {
+            margin-top: 20px;
+        }
+        textarea {
+            width: 80%; /* Reduce the width to 80% of its parent container */
+            padding: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #333;
+            color: #fff;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .navbar {
+            background-color: transparent; /* Light blue */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            position: fixed;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: white;
+            margin: 0 20px;
+        }
+
+        .search-box {
+            display: flex;
+        }
+
+        .search-box input[type="text"] {
+            width: 200px;
+            padding: 5px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        .search-box button, .add-post button {
+            padding: 10px;
+            background-color: #0073e6; /* Light blue */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        /* Style for the profile and log-out links */
+        .navbar a {
+            text-decoration: none;
+            color: white;
+            margin: 0 20px;
+        }
+    </style>
+</head>
+<body style="background-image: url(/media/signup.jpg);color: #fff;">
+    <!-- Fixed Top Navbar -->
+    <div class="navbar">
+        <div class="search-box">
+            <form action="/search" method="POST">
+                {% csrf_token %}
+                <input type="text" name='s1' placeholder="Search for username/community">
+                <button>Search</button>
+            </form>
+        </div>
+        <div class="profile-links">
+            <a href="/upload">Home</a>
+            <a href="profilepage">Profile</a>
+            <a href="logout">Log-Out</a>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <h2>{{ post.title }}</h2>
+        <p>{{ post.content }}</p>
+
+        <h3>Comments:</h3>
+        <ul class="comment-list">
+            {% for comment in comments %}
+                <li type="button">{{ comment.text }}</li>
+                <!-- Display subcomments for this comment -->
+                <ul class="subcomment-list">
+                    {% for subcomment in comment.subcomments.all %}
+                        <li>{{ subcomment.text }}</li>
+                    {% endfor %}
+                </ul>
+            {% endfor %}
+        </ul>
+
+        <h3>Add a Comment:</h3>
+        <form method="post" action="{% url 'post_detail' post_id=post.id %}">
+            {% csrf_token %}
+            <textarea name="comment_text" rows="2" placeholder="Add a comment"></textarea>
+            <button type="submit" name="comment">Submit Comment</button>
+        </form>
+
+        <h3>Add a Subcomment:</h3>
+        {% for comment in comments %}
+            <form method="post" action="{% url 'post_detail' post_id=post.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="comment_id" value="{{ comment.id }}">
+                <textarea name="subcomment_text" rows="2" placeholder="Add a subcomment"></textarea>
+                <button type="submit" name="subcomment">Submit Subcomment</button>
+            </form>
+        {% endfor %}
+    </div>
+</body>
+</html>
